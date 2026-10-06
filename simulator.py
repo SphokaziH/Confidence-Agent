@@ -34,3 +34,47 @@ EPSILON = "ε"
 _EPSILON_ALIASES = {"", "ε", "eps", "epsilon", "λ", "lambda"}
 
 #RESULT CONTAINTERS
+@dataclass
+class TraceStep:
+    """One symbol consumed. For a DFA, from_states/to_states hold one state each."""
+    symbol: str
+    from_states: FrozenSet[str]
+    to_states: FrozenSet[str]
+
+@dataclass
+class TraceResult:
+    string: str
+    accepted: bool
+    steps: List[TraceStep] = field(default_factory=list)
+    initial_states: FrozenSet[str] = frozenset()
+    final_states: FrozenSet[str] = frozenset()
+    reason: str = ""
+ 
+    def pretty(self) -> str:
+        def fmt(s: FrozenSet[str]) -> str:
+            return "{" + ", ".join(sorted(s)) + "}" if s else "{}"
+        lines = [f"Input: '{self.string}'", f"Start: {fmt(self.initial_states)}"]
+        for st in self.steps:
+            lines.append(f"  {fmt(st.from_states)} --{st.symbol}--> {fmt(st.to_states)}")
+        lines.append(f"Result: {'ACCEPT' if self.accepted else 'REJECT'} ({self.reason})")
+        return "\n".join(lines)
+
+@dataclass
+class ClaimResult:
+    """Outcome of comparing a claimed language (predicate) against the automaton."""
+    tested: int
+    agreed: int
+    counterexamples: List[Tuple[str, bool, bool]] = field(default_factory=list)
+    # each counterexample: (string, automaton_accepts, claim_says_accepts)
+ 
+    @property
+    def agreement_rate(self) -> float:
+        return self.agreed / self.tested if self.tested else 1.0
+ 
+    @property
+    def consistent(self) -> bool:
+        return not self.counterexamples
+
+
+    
+
