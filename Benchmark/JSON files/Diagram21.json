@@ -1,0 +1,16 @@
+{
+  "automaton": {
+    "id": "automaton_21",
+    "type": "Mealy",
+    "states": ["q0", "q1", "q2", "q3"],
+    "alphabet": ["a", "b"],
+    "start_state": "q0",
+    "accept_states": [],
+    "transitions": {
+      "q0": { "a": "q1", "b": "q3" },
+      "q1": { "a": "q3", "b": "q2" },
+      "q2": { "a": "q3", "b": "q3" },
+      "q3": { "a": "q3", "b": "q0" }
+    }
+  }
+}

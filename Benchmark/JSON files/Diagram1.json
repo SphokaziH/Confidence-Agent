@@ -1,0 +1,16 @@
+{
+  "automaton": {
+    "id": "automaton_1",
+    "type": "DFA",
+    "states": ["A", "B", "C", "D"],
+    "alphabet": ["0", "1"],
+    "start_state": "A",
+    "accept_states": ["A"],
+    "transitions": {
+      "A": { "0": "C", "1": "B" },
+      "B": { "0": "D", "1": "A" },
+      "C": { "0": "A", "1": "D" },
+      "D": { "0": "B", "1": "C" }
+    }
+  }
+}
