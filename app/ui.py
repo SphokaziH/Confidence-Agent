@@ -3,59 +3,161 @@ import json
 import os
 
 
+# -----------------------------
+# LOAD AUTOMATA JSON FILES
+# -----------------------------
+
+def load_diagrams():
+
+    diagrams = {}
+
+    folder = "benchmark/json"
+
+    if not os.path.exists(folder):
+        st.error("Benchmark JSON folder not found.")
+        return diagrams
+
+
+    for filename in os.listdir(folder):
+
+        if filename.endswith(".json"):
+
+            filepath = os.path.join(folder, filename)
+
+            try:
+                with open(filepath, "r", encoding="utf-8") as file:
+                    diagrams[filename] = json.load(file)
+
+            except json.JSONDecodeError:
+                st.warning(
+                    f"{filename} is not valid JSON and was skipped."
+                )
+
+    return diagrams
+
+
+
+# -----------------------------
+# LOAD QUESTIONS
+# -----------------------------
+
 def load_questions():
 
-    path = "benchmark/questions.json"
+    filepath = "benchmark/questions.json"
 
-    if not os.path.exists(path):
-        return []
+    if not os.path.exists(filepath):
+        return {}
 
-    with open(path, "r", encoding="utf-8") as file:
+    with open(filepath, "r", encoding="utf-8") as file:
         return json.load(file)
 
 
 
-def load_automaton(automaton_id):
+# -----------------------------
+# DISPLAY AUTOMATON INFORMATION
+# -----------------------------
 
-    path = f"benchmark/json/{automaton_id}.json"
+def display_automaton(automaton):
 
-    if not os.path.exists(path):
-        return None
+    st.subheader("Automaton Information")
 
-    with open(path, "r", encoding="utf-8") as file:
-        return json.load(file)
+    col1, col2 = st.columns(2)
 
 
+    with col1:
 
-def render_ui():
+        st.write("**States**")
+        st.write(
+            automaton.get("states", "Not provided")
+        )
 
-    # -----------------------------
-    # Header
-    # -----------------------------
 
-    st.title("🤖 Theory of Computation Confidence Agent")
+        st.write("**Alphabet**")
+        st.write(
+            automaton.get("alphabet", "Not provided")
+        )
 
-    st.write(
-        """
-        This application evaluates AI-generated answers for
-        Finite Automata questions using automated verification.
-        """
-    )
+
+    with col2:
+
+        st.write("**Start State**")
+        st.write(
+            automaton.get(
+                "start",
+                automaton.get(
+                    "start_state",
+                    "Not provided"
+                )
+            )
+        )
+
+
+        st.write("**Accepting States**")
+        st.write(
+            automaton.get(
+                "accept",
+                automaton.get(
+                    "accepting_states",
+                    "Not provided"
+                )
+            )
+        )
+
 
     st.divider()
 
 
-    # -----------------------------
-    # Load benchmark questions
-    # -----------------------------
+    st.write("**Transitions**")
+
+    st.json(
+        automaton.get(
+            "transitions",
+            {}
+        )
+    )
+
+
+
+# -----------------------------
+# MAIN UI
+# -----------------------------
+
+def render_ui():
+
+    st.set_page_config(
+        page_title="Theory of Computation Confidence Agent",
+        page_icon="🤖",
+        layout="wide"
+    )
+
+
+    st.title(
+        "🤖 Theory of Computation Confidence Agent"
+    )
+
+
+    st.write(
+        "This application evaluates AI answers "
+        "for Finite Automata questions."
+    )
+
+
+    st.divider()
+
+
+
+    # Load data
+
+    diagrams = load_diagrams()
 
     questions = load_questions()
 
 
-    if not questions:
 
-        st.warning(
-            "No benchmark questions found."
+    if not diagrams:
+
+        st.error(
+            "No automata JSON files found."
         )
 
         return
@@ -63,156 +165,94 @@ def render_ui():
 
 
     # -----------------------------
-    # Question Selection
+    # SELECT DIAGRAM
     # -----------------------------
 
-    st.subheader("Select Benchmark Question")
-
-
-    question_options = {
-        q["id"]: q
-        for q in questions
-    }
-
-
-    selected_id = st.selectbox(
-        "Choose a question:",
-        question_options.keys()
+    selected_diagram = st.selectbox(
+        "Select Automaton Diagram",
+        diagrams.keys()
     )
 
 
-    selected_question = question_options[selected_id]
+    selected_automaton = diagrams[selected_diagram]
 
 
-    st.divider()
+    st.success(
+        f"Selected: {selected_diagram}"
+    )
 
 
-
-    # -----------------------------
-    # Display Question
-    # -----------------------------
-
-    st.subheader("Question")
-
-
-    st.write(
-        selected_question["question"]
+    display_automaton(
+        selected_automaton
     )
 
 
 
     # -----------------------------
-    # Load Automaton
+    # SELECT QUESTION
     # -----------------------------
 
-    automaton_id = selected_question["automaton"]
-
-
-    automaton = load_automaton(
-        automaton_id
+    st.subheader(
+        "Question"
     )
 
 
-    st.subheader("Automaton Information")
+    if selected_diagram in questions:
 
 
-    if automaton:
+        selected_question = st.selectbox(
 
-        col1, col2 = st.columns(2)
+            "Select Question",
 
+            questions[selected_diagram]
 
-        with col1:
-
-            st.write("States")
-
-            st.write(
-                automaton["states"]
-            )
-
-
-        with col2:
-
-            st.write("Alphabet")
-
-            st.write(
-                automaton.get(
-                    "alphabet",
-                    "Not specified"
-                )
-            )
+        )
 
 
     else:
 
-        st.error(
-            "Automaton JSON not found."
+        selected_question = st.text_area(
+
+            "Enter Question"
+
         )
 
 
 
-    st.divider()
-
-
-
     # -----------------------------
-    # Verification Button
+    # SUBMIT SECTION
     # -----------------------------
 
-    if st.button("🔍 Run Verification"):
+
+    if st.button("Submit"):
+
+
+        st.divider()
+
+
+        st.subheader(
+            "AI Response"
+        )
 
         st.info(
-            "Verification pipeline will run here."
+            "LLM integration coming soon..."
         )
 
 
+        st.subheader(
+            "Verification"
+        )
 
-    # -----------------------------
-    # Results
-    # -----------------------------
-
-
-    st.subheader("Results")
-
-
-    col1, col2, col3 = st.columns(3)
+        st.warning(
+            "Verifier integration coming soon..."
+        )
 
 
-    with col1:
+        st.subheader(
+            "Confidence Score"
+        )
 
         st.metric(
             "Confidence",
-            "Pending"
+            "0%"
         )
-
-
-    with col2:
-
-        st.metric(
-            "Verdict",
-            "Pending"
-        )
-
-
-    with col3:
-
-        st.metric(
-            "Hallucination",
-            "Pending"
-        )
-
-
-
-    st.subheader("AI Response")
-
-
-    st.info(
-        "LLM response will appear here."
-    )
-
-
-    st.subheader("Verification Evidence")
-
-
-    st.info(
-        "Evidence from verifier will appear here."
-    )

@@ -1,0 +1,10 @@
+{
+    "diagram1.json": [
+        "What language does this automaton recognise?",
+        "Is this automaton deterministic?"
+    ],
+
+    "diagram2.json": [
+        "Does this automaton accept the string 101?"
+    ]
+}
