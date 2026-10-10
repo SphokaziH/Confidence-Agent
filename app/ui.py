@@ -1,53 +1,218 @@
 import streamlit as st
+import json
+import os
+
+
+def load_questions():
+
+    path = "benchmark/questions.json"
+
+    if not os.path.exists(path):
+        return []
+
+    with open(path, "r", encoding="utf-8") as file:
+        return json.load(file)
+
+
+
+def load_automaton(automaton_id):
+
+    path = f"benchmark/json/{automaton_id}.json"
+
+    if not os.path.exists(path):
+        return None
+
+    with open(path, "r", encoding="utf-8") as file:
+        return json.load(file)
+
 
 
 def render_ui():
 
-    st.title(
-        "🤖 Theory of Computation Confidence Agent"
-    )
+    # -----------------------------
+    # Header
+    # -----------------------------
+
+    st.title("🤖 Theory of Computation Confidence Agent")
 
     st.write(
-        "This application verifies AI responses "
-        "for Finite Automata questions."
+        """
+        This application evaluates AI-generated answers for
+        Finite Automata questions using automated verification.
+        """
     )
+
+    st.divider()
+
+
+    # -----------------------------
+    # Load benchmark questions
+    # -----------------------------
+
+    questions = load_questions()
+
+
+    if not questions:
+
+        st.warning(
+            "No benchmark questions found."
+        )
+
+        return
+
+
+
+    # -----------------------------
+    # Question Selection
+    # -----------------------------
+
+    st.subheader("Select Benchmark Question")
+
+
+    question_options = {
+        q["id"]: q
+        for q in questions
+    }
+
+
+    selected_id = st.selectbox(
+        "Choose a question:",
+        question_options.keys()
+    )
+
+
+    selected_question = question_options[selected_id]
 
 
     st.divider()
 
 
-    question = st.text_area(
-        "Enter your Theory of Computation question:"
+
+    # -----------------------------
+    # Display Question
+    # -----------------------------
+
+    st.subheader("Question")
+
+
+    st.write(
+        selected_question["question"]
     )
 
 
-    uploaded_file = st.file_uploader(
-        "Upload automaton JSON"
+
+    # -----------------------------
+    # Load Automaton
+    # -----------------------------
+
+    automaton_id = selected_question["automaton"]
+
+
+    automaton = load_automaton(
+        automaton_id
     )
 
 
-    if st.button("Submit"):
-
-        st.success("Question submitted!")
-
-        st.write("Question:")
-        st.write(question)
+    st.subheader("Automaton Information")
 
 
-        st.subheader("LLM Response")
+    if automaton:
+
+        col1, col2 = st.columns(2)
+
+
+        with col1:
+
+            st.write("States")
+
+            st.write(
+                automaton["states"]
+            )
+
+
+        with col2:
+
+            st.write("Alphabet")
+
+            st.write(
+                automaton.get(
+                    "alphabet",
+                    "Not specified"
+                )
+            )
+
+
+    else:
+
+        st.error(
+            "Automaton JSON not found."
+        )
+
+
+
+    st.divider()
+
+
+
+    # -----------------------------
+    # Verification Button
+    # -----------------------------
+
+    if st.button("🔍 Run Verification"):
+
         st.info(
-            "Waiting for LLM integration..."
+            "Verification pipeline will run here."
         )
 
 
-        st.subheader("Verification")
-        st.warning(
-            "Waiting for verifier integration..."
-        )
+
+    # -----------------------------
+    # Results
+    # -----------------------------
 
 
-        st.subheader("Confidence")
+    st.subheader("Results")
+
+
+    col1, col2, col3 = st.columns(3)
+
+
+    with col1:
+
         st.metric(
             "Confidence",
-            "0%"
+            "Pending"
         )
+
+
+    with col2:
+
+        st.metric(
+            "Verdict",
+            "Pending"
+        )
+
+
+    with col3:
+
+        st.metric(
+            "Hallucination",
+            "Pending"
+        )
+
+
+
+    st.subheader("AI Response")
+
+
+    st.info(
+        "LLM response will appear here."
+    )
+
+
+    st.subheader("Verification Evidence")
+
+
+    st.info(
+        "Evidence from verifier will appear here."
+    )
