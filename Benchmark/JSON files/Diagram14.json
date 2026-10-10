@@ -1,0 +1,17 @@
+{
+  "automaton": {
+    "id": "automaton_14",
+    "type": "DFA",
+    "states": ["q0", "q1", "q2", "q3", "q4"],
+    "alphabet": ["a", "b"],
+    "start_state": "q0",
+    "accept_states": ["q3"],
+    "transitions": {
+      "q0": { "a": "q1", "b": "q1" },
+      "q1": { "a": "q2", "b": "q2" },
+      "q2": { "a": "q3", "b": "q4" },
+      "q3": { "a": "q3", "b": "q3" },
+      "q4": { "a": "q4", "b": "q4" }
+    }
+  }
+}

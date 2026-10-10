@@ -1,0 +1,16 @@
+{
+  "automaton": {
+    "id": "automaton_3",
+    "type": "NFA",
+    "states": ["q0", "q1", "q2", "q3"],
+    "alphabet": ["a", "b", "epsilon"],
+    "start_state": "q0",
+    "accept_states": ["q3"],
+    "transitions": {
+      "q0": { "b": ["q1", "q2"] },
+      "q1": { "a": ["q3"], "b": ["q2"], "epsilon": ["q2"] },
+      "q2": { "b": ["q2"], "epsilon": ["q1"] },
+      "q3": { "b": ["q3"], "epsilon": ["q1"] }
+    }
+  }
+}

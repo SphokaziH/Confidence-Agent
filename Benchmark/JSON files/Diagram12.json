@@ -1,0 +1,15 @@
+{
+  "automaton": {
+    "id": "automaton_12",
+    "type": "DFA",
+    "states": ["q0", "q1", "q2"],
+    "alphabet": ["a", "b"],
+    "start_state": "q0",
+    "accept_states": ["q2"],
+    "transitions": {
+      "q0": { "a": "q0", "b": "q1" },
+      "q1": { "a": "q0", "b": "q2" },
+      "q2": { "a": "q0", "b": "q2" }
+    }
+  }
+}

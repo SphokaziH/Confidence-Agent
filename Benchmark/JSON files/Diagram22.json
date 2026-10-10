@@ -1,0 +1,16 @@
+{
+  "automaton": {
+    "id": "automaton_22",
+    "type": "NFA",
+    "states": ["A", "B", "C", "D"],
+    "alphabet": ["0", "1", "epsilon"],
+    "start_state": "A",
+    "accept_states": ["A"],
+    "transitions": {
+      "A": { "1": ["B"], "epsilon": ["C"] },
+      "B": { "0": ["A", "D"], "1": ["C"] },
+      "C": {},
+      "D": {}
+    }
+  }
+}
