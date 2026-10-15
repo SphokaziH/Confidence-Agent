@@ -9,14 +9,17 @@ verifier.py uses it to check claims made by the foundation model.
 JSON format (NFA targets may be a list; epsilon key may be "", "eps", "ε"):
 
 {
+
+ "automaton": {
   "states": ["q0", "q1", "q2"],
   "alphabet": ["0", "1"],            # optional, inferred if missing
-  "start": "q0",
-  "accept": ["q2"],
+  "start_state": "q0",
+  "accept_states": ["q2"],
   "transitions": {
       "q0": {"0": "q1", "1": "q0"},
       "q1": {"0": "q1", "1": "q2"},
       "q2": {"0": "q1", "1": "q0"}
+      }
   }
 }
 """
@@ -131,10 +134,13 @@ class Automaton:
 
     @classmethod
     def from_dict(cls, data: dict) -> "Automaton":
+
+        if "automaton" in data:
+            data = data["automaton"]
         return cls(
             states=data["states"],
-            start=data["start"],
-            accept=data.get("accept", data.get("accepting", [])),
+            start=data.get("start", data.get("start_state")),
+            accept=data.get("accept", data.get("accepting", data.get("accept_states", []))),
             transitions=data.get("transitions", {}),
             alphabet=data.get("alphabet"),
         )
