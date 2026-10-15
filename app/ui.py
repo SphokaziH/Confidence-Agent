@@ -11,7 +11,7 @@ def load_diagrams():
 
     diagrams = {}
 
-    folder = "benchmark/json"
+    folder = "Benchmark/JSON files"
 
     if not os.path.exists(folder):
         st.error("Benchmark JSON folder not found.")
@@ -24,17 +24,11 @@ def load_diagrams():
 
             filepath = os.path.join(folder, filename)
 
-            try:
-                with open(filepath, "r", encoding="utf-8") as file:
-                    diagrams[filename] = json.load(file)
+            with open(filepath, "r", encoding="utf-8") as file:
+                diagrams[filename] = json.load(file)
 
-            except json.JSONDecodeError:
-                st.warning(
-                    f"{filename} is not valid JSON and was skipped."
-                )
 
     return diagrams
-
 
 
 # -----------------------------
@@ -43,15 +37,34 @@ def load_diagrams():
 
 def load_questions():
 
-    filepath = "benchmark/questions.json"
+    filepath = "Benchmark/questions.json"
 
     if not os.path.exists(filepath):
         return {}
 
     with open(filepath, "r", encoding="utf-8") as file:
         return json.load(file)
+    
+# -----------------------------
+# LOAD Images
+# -----------------------------
 
+def display_diagram(selected_id):
 
+    image_path = f"Benchmark/Diagrams/{selected_id}.png"
+
+    if os.path.exists(image_path):
+
+        st.image(
+            image_path,
+            caption=selected_id
+        )
+
+    else:
+
+        st.warning(
+            "Diagram image not found."
+        )
 
 # -----------------------------
 # DISPLAY AUTOMATON INFORMATION
@@ -168,18 +181,25 @@ def render_ui():
     # SELECT DIAGRAM
     # -----------------------------
 
-    selected_diagram = st.selectbox(
-        "Select Automaton Diagram",
-        diagrams.keys()
+    benchmark_ids = [
+    filename
+    for filename in diagrams.keys()
+    ]
+
+    selected_id = st.selectbox(
+        "Select Benchmark",
+            benchmark_ids
     )
-
-
-    selected_automaton = diagrams[selected_diagram]
-
+    selected_automaton = diagrams[selected_id]
 
     st.success(
-        f"Selected: {selected_diagram}"
+    f"Selected: {selected_id}"
     )
+
+
+    st.subheader("Diagram")
+
+    display_diagram(selected_id)
 
 
     display_automaton(
@@ -192,29 +212,19 @@ def render_ui():
     # SELECT QUESTION
     # -----------------------------
 
-    st.subheader(
-        "Question"
-    )
+    st.subheader("Question")
 
 
-    if selected_diagram in questions:
+    if selected_id in questions:
 
+        selected_question = questions[selected_id]
 
-        selected_question = st.selectbox(
-
-            "Select Question",
-
-            questions[selected_diagram]
-
-        )
-
+        st.write(selected_question)
 
     else:
 
-        selected_question = st.text_area(
-
-            "Enter Question"
-
+        st.warning(
+            "No question found for this benchmark"
         )
 
 
