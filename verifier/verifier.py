@@ -14,8 +14,7 @@ this module is responsible for:
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
 
-from simulator import Automaton, ClaimResult
-
+from verifier.simulator import Automaton, ClaimResult
 #---------------- RESULTS CONTAINER ----------------------
 
 @dataclass

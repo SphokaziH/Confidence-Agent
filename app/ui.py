@@ -2,6 +2,9 @@ import streamlit as st
 import json
 import os
 
+from llm.llm import generate_response
+from verifier.simulator import Automaton
+from verifier.verifier import Verifier
 
 # -----------------------------
 # LOAD AUTOMATA JSON FILES
@@ -210,7 +213,11 @@ def render_ui():
     )
 
 
+    if selected_id in questions:
 
+        selected_question = questions[selected_id]
+
+        st.write(selected_question[0])
     # -----------------------------
     # SELECT QUESTION
     # -----------------------------
@@ -231,41 +238,43 @@ def render_ui():
         )
 
 
-
-    # -----------------------------
-    # SUBMIT SECTION
-    # -----------------------------
-
-
     if st.button("Submit"):
-
 
         st.divider()
 
+
+    # -----------------------------
+    # LLM RESPONSE
+    # -----------------------------
 
         st.subheader(
             "AI Response"
         )
 
-        st.info(
-            "LLM integration coming soon..."
+
+        response = generate_response(
+            selected_question[0],
+            selected_automaton
         )
 
+
+        st.write(response)
+
+
+    # -----------------------------
+    # VERIFICATION
+    # -----------------------------
 
         st.subheader(
             "Verification"
         )
 
-        st.warning(
-            "Verifier integration coming soon..."
+
+        automaton = Automaton.from_dict(
+            selected_automaton
         )
 
 
-        st.subheader(
-            "Confidence Score"
-        )
-
-        st.metric(
-            "Confidence",
-            "0%"
+        verifier = Verifier(
+            automaton
         )

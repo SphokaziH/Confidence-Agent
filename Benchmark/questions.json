@@ -1,74 +1,74 @@
 {   
-    "Diagram1.json": [
+    "Diagram31.json": [
         "What language does the following DFA accept?"
     ],
 
-    "Diagram2.json": [
+    "Diagram32.json": [
         "Convert the following NFA to a regular expression"
     ],
-    "Diagram3.json": [
+    "Diagram33.json": [
         "Classify the diagram below as either a 1. DFA only, 2. NFA only, or 3. DFA and NFA"
     ],
 
-    "Diagram4.json": [
+    "Diagram34.json": [
         "What is the output string for the following Moore Machine?"
     ],
-    "Diagram5.json": [
+    "Diagram35.json": [
         "Define delta* for each state in the NFA below"
     ],
 
-    "Diagram6.json": [
+    "Diagram36.json": [
         "What output does the mealy machine below produce for the input string aaabbb"
     ],
-    "Diagram7.json": [
+    "Diagram37.json": [
         "Convert the following NFA to a regular expression"
     ],
 
-    "Diagram8.json": [
+    "Diagram38.json": [
         "Construct a right linear grammar for the NFA below?"
     ],
     
-    "Diagram9.json": [
+    "Diagram39.json": [
         "Explain the difference between the following 2 DFA's, and describe the types of strings they accept"
     ],
 
-    "Diagram10.json": [
+    "Diagram40.json": [
         "Let sigma = {a, b}. Then, consider the following DFA, M whose language L(M) contains strings consisting of one or more a's followed by one or more b's. Then M = (Q, sigma, delta, q0, F), Q = {q0, q1, q2, qrej}, and F = {q2}. Define the transition function."
     ],
-    "Diagram11.json": [
+    "Diagram41.json": [
         "What language does the following DFA accept?"
     ],
 
-    "Diagram12.json": [
+    "Diagram42.json": [
         "Convert the following NFA to a regular expression"
     ],
-    "Diagram13.json": [
+    "Diagram43.json": [
         "Classify the diagram below as either a 1. DFA only, 2. NFA only, or 3. DFA and NFA"
     ],
 
-    "Diagram14.json": [
+    "Diagram44.json": [
         "What is the output string for the following Moore Machine?"
     ],
-    "Diagram15.json": [
+    "Diagram45.json": [
         "Define delta* for each state in the NFA below"
     ],
 
-    "Diagram16.json": [
+    "Diagram46.json": [
         "What output does the mealy machine below produce for the input string aaabbb"
     ],
-    "Diagram17.json": [
+    "Diagram47.json": [
         "Convert the following NFA to a regular expression"
     ],
 
-    "Diagram18.json": [
+    "Diagram48.json": [
         "Construct a right linear grammar for the NFA below?"
     ],
     
-    "Diagram19.json": [
+    "Diagram49.json": [
         "Explain the difference between the following 2 DFA's, and describe the types of strings they accept"
     ],
 
-    "Diagram20.json": [
+    "Diagram50.json": [
         "Let sigma = {a, b}. Then, consider the following DFA, M whose language L(M) contains strings consisting of one or more a's followed by one or more b's. Then M = (Q, sigma, delta, q0, F), Q = {q0, q1, q2, qrej}, and F = {q2}. Define the transition function."
     ],
     
@@ -109,75 +109,75 @@
     "Diagram30.json": [
         "Is the following diagram an NFA or DFA?"
     ],
-    "Diagram31.json": [
+    "Diagram11.json": [
         "Does the following DFA accept the string 0111001"
     ],
-    "Diagram32.json": [
+    "Diagram12.json": [
         "Describe the language recognized by the DFA."
     ],
 
-    "Diagram33.json": [
+    "Diagram13.json": [
         "What is the regular expression of the DFA"
     ],
-    "Diagram34.json": [
+    "Diagram14.json": [
         "Does the following DFA accept string ab "
     ],
 
-    "Diagram35.json": [
+    "Diagram15.json": [
         "Describe the language recognized by the DFA. "
     ],
-    "Diagram36.json": [
+    "Diagram16.json": [
         "What is the regular expression of the DFA. "
     ],
 
-    "Diagram37.json": [
+    "Diagram17.json": [
         "Can the following NFA accept strings containing at least 2 0s or exactly 2 1s."
     ],
-    "Diagram38.json": [
+    "Diagram18.json": [
         "Is this NFA a DFA"
     ],
 
-    "Diagram39.json": [
+    "Diagram19.json": [
         "Does the NFA accept only one 0 ?"
     ],
     
-    "Diagram40.json": [
+    "Diagram20.json": [
         "How many final states does this NFA have?"
     ],
 
-    "Diagram41.json": [
+    "Diagram1.json": [
         "What language does the following DFA represent"
     ],
     
-    "Diagram42.json": [
+    "Diagram2.json": [
         "write a formal definition for this FA"
     ],
 
-    "Diagram43.json": [
+    "Diagram3.json": [
         "convert the NFA to a regular expression. "
     ],
     
-    "Diagram44.json": [
+    "Diagram4.json": [
         "write the language and regular expression for the finite automata"
     ],
 
-    "Diagram45.json": [
+    "Diagram5.json": [
         "does this FA accept the input 22101001211001 "
     ],
-    "Diagram46.json": [
+    "Diagram6.json": [
         "Is 0210220#2 a member of this language for this FA?"
     ],
 
-    "Diagram47.json": [
+    "Diagram7.json": [
         "convert the nfa to regular grammar?"
     ],
-    "Diagram48.json": [
+    "Diagram8.json": [
         "give the regular expression for this dfa?"
     ],
-    "Diagram49.json": [
+    "Diagram9.json": [
         "find Regular Expression of THIS Deterministic Finite automata?"
     ],
-    "Diagram50.json": [
+    "Diagram10.json": [
         "Which of the regular expressions given below represent the following DFA? (I) 0*1(1+00*1)* (II) 0*1*1+11*0*1 (III) (0+1)*1 "
     ]
 }

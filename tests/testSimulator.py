@@ -5,7 +5,7 @@ Run:  python test_simulator.py
 (also works with:  pytest test_simulator.py)
 """
 
-from simulator import Automaton
+from verifier.simulator import Automaton
 
 # DFA: binary strings ending in "01"
 ENDS_01 = Automaton.from_dict({
