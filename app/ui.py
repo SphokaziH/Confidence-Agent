@@ -140,7 +140,27 @@ def display_automaton(data):
 # -----------------------------
 # MAIN UI
 # -----------------------------
+def run_verification(automaton_data):
 
+    automaton = Automaton.from_dict(
+        automaton_data
+    )
+
+    verifier = Verifier(
+        automaton
+    )
+
+
+    result = verifier.verify_structure(
+        {
+            "type": automaton_data["automaton"]["type"],
+            "states": automaton_data["automaton"]["states"],
+            "start": automaton_data["automaton"]["start_state"],
+            "accepting": automaton_data["automaton"]["accept_states"]
+        }
+    )
+
+    return result
 def render_ui():
 
     st.set_page_config(
@@ -270,11 +290,15 @@ def render_ui():
         )
 
 
-        automaton = Automaton.from_dict(
+        verification = run_verification(
             selected_automaton
         )
 
 
-        verifier = Verifier(
-            automaton
+        st.text(
+            verification.pretty()
+        )
+        st.metric(
+            "Confidence",
+            f"{verification.confidence:.0%}"
         )
