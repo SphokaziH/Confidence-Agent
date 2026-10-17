@@ -51,7 +51,9 @@ def load_questions():
 
 def display_diagram(selected_id):
 
-    image_path = f"Benchmark/Diagrams/{selected_id}.png"
+    image_name = selected_id.replace(".json", ".png")
+
+    image_path = f"Benchmark/Diagrams/{image_name}"
 
     if os.path.exists(image_path):
 
@@ -63,14 +65,16 @@ def display_diagram(selected_id):
     else:
 
         st.warning(
-            "Diagram image not found."
+            f"Diagram image not found: {image_path}"
         )
-
 # -----------------------------
 # DISPLAY AUTOMATON INFORMATION
 # -----------------------------
 
-def display_automaton(automaton):
+def display_automaton(data):
+
+    # Extract the actual automaton information
+    automaton = data.get("automaton", data)
 
     st.subheader("Automaton Information")
 
@@ -78,6 +82,11 @@ def display_automaton(automaton):
 
 
     with col1:
+
+        st.write("**Type**")
+        st.write(
+            automaton.get("type", "Not provided")
+        )
 
         st.write("**States**")
         st.write(
@@ -96,11 +105,8 @@ def display_automaton(automaton):
         st.write("**Start State**")
         st.write(
             automaton.get(
-                "start",
-                automaton.get(
-                    "start_state",
-                    "Not provided"
-                )
+                "start_state",
+                "Not provided"
             )
         )
 
@@ -108,11 +114,8 @@ def display_automaton(automaton):
         st.write("**Accepting States**")
         st.write(
             automaton.get(
-                "accept",
-                automaton.get(
-                    "accepting_states",
-                    "Not provided"
-                )
+                "accept_states",
+                "Not provided"
             )
         )
 
@@ -219,7 +222,7 @@ def render_ui():
 
         selected_question = questions[selected_id]
 
-        st.write(selected_question)
+        st.write(selected_question[0])
 
     else:
 
