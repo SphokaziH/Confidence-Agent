@@ -14,7 +14,12 @@ this module is responsible for:
 from dataclasses import dataclass, field
 from typing import Any, Callable, Dict, List, Optional
 
-from verifier.simulator import Automaton, ClaimResult
+try:
+    # Works when verifier.py and simulator.py are in the same package.
+    from .simulator import Automaton, ClaimResult
+except ImportError:
+    # Works when verifier.py and simulator.py are sibling files.
+    from simulator import Automaton, ClaimResult
 #---------------- RESULTS CONTAINER ----------------------
 
 @dataclass
@@ -403,6 +408,92 @@ class Verifier:
                 "actual_acceptance": actual_acceptance
             }
         )
+
+
+    # ------------------- LLM RESPONSE INTEGRATION -------------------
+    def verify_llm_response(self, response: Any) -> VerificationResult:
+        """
+        Parse an LLM response and route its structured claim to the
+        appropriate verification method.
+
+        `response` may be the JSON string returned by llm.generate_response()
+        or an already-parsed dictionary.
+
+        Supported claim types from llm.py:
+          - "structure": claim describes automaton properties
+          - "string": claim contains "string" and Boolean "accepted"
+          - "regex": claim contains "regex"
+        """
+        import json
+        import re
+
+        def unable(reason: str, claim_type: str = "unknown") -> VerificationResult:
+            return VerificationResult(
+                verdict="UNABLE_TO_VERIFY",
+                confidence=0.0,
+                hallucination=False,
+                claim_type=claim_type,
+                evidence=[reason],
+                details={"verified": False},
+            )
+
+        # Parse the JSON returned by the LLM.
+        if isinstance(response, str):
+            try:
+                data = json.loads(response)
+            except (json.JSONDecodeError, TypeError) as exc:
+                return unable(f"LLM response was not valid JSON: {exc}")
+        elif isinstance(response, dict):
+            data = response
+        else:
+            return unable("LLM response must be a JSON string or dictionary.")
+
+        if not isinstance(data, dict):
+            return unable("LLM JSON must contain an object at the top level.")
+
+        claim_type = data.get("claim_type")
+        claim = data.get("claim")
+
+        if not isinstance(claim_type, str) or not isinstance(claim, dict):
+            return unable(
+                "LLM response must contain a string 'claim_type' and an object 'claim'.",
+                str(claim_type or "unknown"),
+            )
+
+        # Route the LLM's claim to the relevant existing verifier method.
+        if claim_type == "structure":
+            return self.verify_structure(claim)
+
+        if claim_type == "string":
+            string = claim.get("string")
+            accepted = claim.get("accepted")
+
+            if not isinstance(string, str) or not isinstance(accepted, bool):
+                return unable(
+                    "String claims must contain a string 'string' and Boolean 'accepted'.",
+                    "string",
+                )
+
+            return self.verify_string(string, accepted)
+
+        if claim_type == "regex":
+            pattern = claim.get("regex")
+
+            if not isinstance(pattern, str):
+                return unable(
+                    "Regex claims must contain a string 'regex' field.",
+                    "regex",
+                )
+
+            try:
+                re.compile(pattern)
+            except re.error as exc:
+                return unable(f"The LLM supplied an invalid regular expression: {exc}", "regex")
+
+            return self.verify_regex_claim(pattern)
+
+        return unable(f"Unsupported LLM claim_type: {claim_type!r}", claim_type)
+
 
 # -------------------Convenient Functions----------------
 def verify_language(
